@@ -33,6 +33,7 @@ def convert_object(df,row):
 
 #adds to a list of structures 
 def depth_counter(lst):
+    pass
     
 
 ###################################################Main Code############################################################
@@ -64,6 +65,17 @@ if __name__ == "__main__":
         s_list.append(Structure(name,size,float(depth)))
 
 
+    s_count = {
+        '80x100' : [],
+        '100x100' : [],
+        '100x120' : [],
+        '120x100' : [],
+        '120x120' : [],
+        '120x140' : [],
+        '150x150' : [],
+        '125' : [],
+        '150' : [],
+        }
 
     # ##Counting of structurs###
     # s_100x120_0_2 = [x for x in s_list if (x.size == "100X120" or x.size == "120X100") and x.depth > 0  and x.depth<=2]
