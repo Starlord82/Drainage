@@ -25,7 +25,8 @@ def dimenstion(df,row):
     else:
        return re.split("-| or", df.loc[row, "SIZE"])[1] #Returns rectangular dimensions list of splited string
 
-def convert_object(df,row):
+
+def convert_to_object_list(df,row):
         name = df.loc[row, "Name"]
         size = df.loc[row, "SIZE"]
         depth = df.loc[row, "DEPTH"]
@@ -34,6 +35,11 @@ def convert_object(df,row):
 #adds to a list of structures 
 def depth_counter(lst):
     pass
+
+#Object list to dictionary of one of the attributes as unique keys and an empty list as value
+def ol2dl(lst, att):
+    a_set = set([getattr(obj, att) for obj in lst if '???' not in getattr(obj, att)])
+    return dict((key, []) for key in a_set)
     
 
 ###################################################Main Code############################################################
@@ -61,21 +67,20 @@ if __name__ == "__main__":
     s_list = []
 
     for row in range(1,len(df)+1):
-        name,size,depth = convert_object(df,row)
+        name,size,depth = convert_to_object_list(df,row)
         s_list.append(Structure(name,size,float(depth)))
 
 
-    s_count = {
-        '80x100' : [],
-        '100x100' : [],
-        '100x120' : [],
-        '120x100' : [],
-        '120x120' : [],
-        '120x140' : [],
-        '150x150' : [],
-        '125' : [],
-        '150' : [],
-        }
+    qs = ol2dl(s_list, 'size')
+    #^#
+    #Creates a dictionary with keys of sizes and values as list counters where
+    #index 0 is depth 0-2
+    #index 1 is depth 2-3
+    #index 2 is depth 3-4
+    #etc.
+
+
+    
 
     # ##Counting of structurs###
     # s_100x120_0_2 = [x for x in s_list if (x.size == "100X120" or x.size == "120X100") and x.depth > 0  and x.depth<=2]
