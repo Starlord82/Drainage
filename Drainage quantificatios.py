@@ -1,4 +1,4 @@
-#Definitions
+#########################################Definitions#############################################
 #Manholes with attributes of size, name and depths
 class Structure:
     
@@ -51,9 +51,9 @@ if __name__ == "__main__":
 
     df = pd.read_csv(filename)
     df_mh = df
-    df_mh.columns = df_mh.iloc[0]
+    df_mh.columns = df_mh.iloc[0]           ##Makes the second row the header
     df_mh = df_mh.drop(0)
-    df_mh = df_mh.drop("Details",1)
+    df_mh = df_mh.drop("Details",1) 
     df_mh = df_mh.where(df_mh != '???' , 0)  ##replaces '???' from the depths witn 0
 
 
@@ -63,24 +63,39 @@ if __name__ == "__main__":
     df = df_mh
 
 
-    #Structure quantification
+    # Structure quantification
     s_list = []
 
     for row in range(1,len(df)+1):
         name,size,depth = convert_to_object_list(df,row)
         s_list.append(Structure(name,size,float(depth)))
 
-
-    qs = ol2dl(s_list, 'size')
-    #^#
-    #Creates a dictionary with keys of sizes and values as list counters where
-    #index 0 is depth 0-2
-    #index 1 is depth 2-3
-    #index 2 is depth 3-4
-    #etc.
-
-
     
+    qs = ol2dl(s_list, 'size') 
+    # ^#qs for quantities structure
+    # Creates a dictionary with keys of sizes and values as as an empty list of counters where:
+    # index 0 is depth 0-2
+    # index 1 is depth 2-3
+    # index 2 is depth 3-4
+    # etc.
+
+    for key in qs:
+        First we check in range of 0-2
+        qs[key] = [obj for obj in s_list if obj.size == key and obj.depth <= 2] 
+        Then we check in range of 2-8 with increment of 1.
+        for d in range(2,8):
+            qs[key] = [obj for obj in s_list if (obj.size == key) and obj.depth >= float(d)] 
+
+    #Check, delete later
+    for values in qs.values():
+       if len(values) == 0:
+            print('zero length')
+            continue
+       else:
+            for value in values:
+                print(value.name, value.size, value.depth)
+
+
 
     # ##Counting of structurs###
     # s_100x120_0_2 = [x for x in s_list if (x.size == "100X120" or x.size == "120X100") and x.depth > 0  and x.depth<=2]
