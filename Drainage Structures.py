@@ -13,13 +13,22 @@ class Structure:
         return False
 
 
-#Cleans size text
 def dimenstion(df,row):
+    #Cleans size text
     dim = df.loc[row, "SIZE"]        
     if "???X???" in dim:
        return df.loc[row, "SIZE"].split('D-')[1] #Returns the diameter from list of splited string
     else:
        return re.split("-| or", df.loc[row, "SIZE"])[1] #Returns rectangular dimensions list of splited string
+
+def transpose_size(df,row):
+    # prevents size of 120X140 and 140X120 to count as 2 
+    size = df.loc[row,"SIZE"]
+    if 'X' in size and size != '???X???':
+        sp = size.split('X')
+        return str(min(sp)) + 'X' + str(max(sp))
+    else:
+        return size
 
 
 def convert_to_object_list(df,row):
@@ -27,6 +36,8 @@ def convert_to_object_list(df,row):
         size = df.loc[row, "SIZE"]
         depth = df.loc[row, "DEPTH"]
         return (name, size, depth)
+
+
 
 #adds to a list of structures 
 def depth_counter(lst):
@@ -58,6 +69,8 @@ if __name__ == "__main__":
 
     for row in range(1,len(df_mh)+1):
         df_mh.loc[row, "SIZE"] = dimenstion(df_mh,row)
+        df_mh.loc[row, "SIZE"] = transpose_size(df_mh,row)
+
 
     df = df_mh
 
@@ -101,6 +114,7 @@ if __name__ == "__main__":
     df_new = pd.DataFrame(data=qs,
                             index=rowindex)
 
+   
 
     with pd.ExcelWriter(filename.split('.csv')[0] + '-output.xlsx') as writer:
         df.to_excel(writer, sheet_name="מקור")
