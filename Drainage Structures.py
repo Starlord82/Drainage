@@ -39,10 +39,12 @@ def ol2dl(lst, att):
     
 
 ###################################################Main Code############################################################
-if __name__ != "__main__":
+if __name__ == "__main__":
     import pandas as pd
     import re
     from tkinter.filedialog import askopenfilename
+    from tkinter import filedialog
+
     filename = askopenfilename()
 
     df = pd.read_csv(filename)
@@ -90,9 +92,22 @@ if __name__ != "__main__":
                     counter += 1
             qs[key].append(counter)
 
-    # Check, Delete Later.
-    for key in qs:
-        print(key, qs[key])
+
+    rowindex = ['0-2','2-3','3-4','4-5','5-6','6-7','7-8']
+
+    df_new = pd.DataFrame(data=qs,
+                            index=rowindex)
+
+
+    with pd.ExcelWriter(filename.split('.csv')[0] + '-output.xlsx') as writer:
+        df.to_excel(writer, sheet_name="מקור")
+        df_new.to_excel(writer, sheet_name="כמויות")
+
+
+    print('File exported Succesfuly')
+            
+
+
 
 
 
