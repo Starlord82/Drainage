@@ -44,6 +44,7 @@ if __name__ == "__main__":
     import re
     from tkinter.filedialog import askopenfilename
     from tkinter import filedialog
+    import numpy as np
 
     filename = askopenfilename()
 
@@ -81,19 +82,21 @@ if __name__ == "__main__":
         # First we check in range of 0-2
         counter = 0
         for obj in s_list:
-                if (obj.size == key) and (obj.depth > 0 and obj.depth <= 2):
+                if (obj.size == key) and (obj.depth > 0 and obj.depth <= 1.25):
                     counter += 1
         qs[key].append(counter)
         # Then we check in range of 2-8 with increment of 1.
-        for d in range(2,8):
+        for d in np.arange(1.25,7.75,0.5):
             counter = 0
             for obj in s_list:
-                if (obj.size == key) and (obj.depth > d and obj.depth <= d+1):
+                if (obj.size == key) and (obj.depth > d and obj.depth <= d+0.5):
                     counter += 1
             qs[key].append(counter)
 
 
-    rowindex = ['0-2','2-3','3-4','4-5','5-6','6-7','7-8']
+    rowindex = ['0-1.25','1.25-1.75','1.75-2.25','2.25-2.75','2.75-3.25',
+                '3.25-3.75','3.75-4.25','4.25-4.75','4.75-5.25','5.25-5.75',
+                '5.75-6.25','6.25-6.75','6.75-7.25','7.25-7.75']
 
     df_new = pd.DataFrame(data=qs,
                             index=rowindex)
