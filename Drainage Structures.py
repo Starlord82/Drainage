@@ -22,7 +22,7 @@ def dimenstion(df,row):
        return re.split("-| or", df.loc[row, "SIZE"])[1] #Returns rectangular dimensions list of splited string
 
 def transpose_size(df,row):
-    # prevents size of 120X140 and 140X120 to count as 2 
+    # prevents sizes of 120X140 and 140X120 to count as 2 diffrent sizes 
     size = df.loc[row,"SIZE"]
     if 'X' in size and size != '???X???':
         sp = size.split('X')
