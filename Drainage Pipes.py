@@ -16,11 +16,12 @@ class Pipe():
         self.length = length
         self.maxdepth = maxdepth
 
-    def twidth():
+    def twidth(self):
         widths = {40:7.5,50:8.5,60:10,80:12.4,100:14.8,125:17.5,150:18,180:20,200:20,24:240,320:30}
-        return widths[diameter]
+        return widths[self.diameter]
 
-pipe1 = Pipe('p-1',20,130,2.5)
+pipe1 = Pipe('p-1',90,130,2.5)
+print(pipe1.twidth())
 
 
 
