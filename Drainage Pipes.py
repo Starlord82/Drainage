@@ -39,3 +39,6 @@ for row in range(len(df)):
     n,d,l,de = convert_to_object_list(df, row)
     pipelst.append(Pipe(n,d,l,de))
 
+for pipe in pipelst:
+    print(pipe.name,pipe.diameter,pipe.twidth())
+
