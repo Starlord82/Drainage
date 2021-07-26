@@ -64,7 +64,7 @@ if __name__ == "__main__":
     df_mh.columns = df_mh.iloc[0]           ##Makes the second row the header
     df_mh = df_mh.drop(0)
     df_mh = df_mh.drop("Details",1) 
-    df_mh = df_mh.where(df_mh != '???' , 0)  ##replaces '???' from the depths witn 0
+    df_mh = df_mh.where(df_mh != '???' , 0)  ##replaces '???' from the depths with 0
 
 
     for row in range(1,len(df_mh)+1):
