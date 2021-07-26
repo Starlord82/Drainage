@@ -1,3 +1,5 @@
+import pandas as pd
+
 #Pipes
 class Pipe():
     """docstring for ClassName"""
@@ -20,9 +22,20 @@ class Pipe():
         widths = {40:7.5,50:8.5,60:10,80:12.4,100:14.8,125:17.5,150:18,180:20,200:20,24:240,320:30}
         return widths[self.diameter]
 
-pipe1 = Pipe('p-1',90,130,2.5)
-print(pipe1.twidth())
+def convert_to_object_list(df,row):
+    return (df.loc[row,'Name'], df.loc[row,'Diameter'], df.loc[row,'Length'], df.loc[row,'Depth'])
 
 
+#pipe1 = Pipe('p-1',90,130,2.5)
+#print(pipe1.twidth())
 
-        
+pipes = {'Name' : ['P-1','P-2','P-3','P-4','P-5','P-6'], 'Diameter' : [40,60,80,50,90,60],
+         'Length' : [20,56,54,26,65,54], 'Depth' : [1.3,1.4,1.4,2.5,3.6,4.3]}
+df = pd.DataFrame(pipes)
+print(df)
+pipelst = []
+
+for row in range(len(df)):
+    n,d,l,de = convert_to_object_list(df, row)
+    pipelst.append(Pipe(n,d,l,de))
+
