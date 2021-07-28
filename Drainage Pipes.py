@@ -33,24 +33,43 @@ class Pipe():
 
 def convert_to_object_list(df,row):
     '''returns tuples of values from dataframe'''
-    return (df.loc[row,'Name'], df.loc[row,'Diameter'], df.loc[row,'Length'], df.loc[row,'Depth'])
+    t = (df.loc[row,' Pipe Name'], df.loc[row,'Diameter'], df.loc[row,'Length'], df.loc[row,'Depth'])
+    return t
 
-def delete_level(df):
+def delete_level(df_input):
     '''removes first level'''
-    df.columns = df.iloc[0]
-    df = df.drop(0)
-    return df
+    df_input = df_input.rename(columns = df_input.iloc[0])
+    df_input = df_input.drop(0)
+    df_input = df_input.reset_index(drop = True)
+    return df_input
+
+def find_depth(df,row):
+    '''returns depth based on max cover'''
+    max_cover = float(df.loc[row,"COVER"].split('max-')[1])
+    depth = max_cover 
+    return depth
+
+def replace_depth(df,row):
+    pass
+
+def remove_cm(df):
+    '''removes cm from data frame'''
+    for row in range(len(df)):
+        df.loc[row,'Diameter'].replace('cm','')
+    return(df)
+
 
 
 
 filename = askopenfilename()
 df = pd.read_csv(filename)
-# df = delete_level(df)
-#I NEED TO REPLACE THE HEADING WITH DF.RENAME()
+df = delete_level(df)
+print(find_depth(df,0))
+df = remove_cm(df)
+
 print(df)
 
-
-
+# pipelst = []
 # for row in range(len(df)):
 #     n,d,l,de = convert_to_object_list(df, row)
 #     pipelst.append(Pipe(n,d,l,de))
