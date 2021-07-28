@@ -98,7 +98,7 @@ if __name__ == "__main__":
                 if (obj.size == key) and (obj.depth > 0 and obj.depth <= 1.25):
                     counter += 1
         qs[key].append(counter)
-        # Then we check in range of 2-8 with increment of 1.
+        # Then we check in range of 2-8 with increment of 0.5.
         for d in np.arange(1.25,7.75,0.5):
             counter = 0
             for obj in s_list:

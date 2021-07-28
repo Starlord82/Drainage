@@ -15,18 +15,18 @@ class Pipe():
     """docstring for ClassName"""
     
     def __init__(self, name, diameter, length):
-        self.name = name
+        self.name = name      
         self.diameter = diameter
-        while True:
-            try:
-                if self.diameter in dia_list:
-                    break
-                else:
-                    self.diameter = int(input(self.name + ' has a bad diameter value\nPlease choose a new diameter from the list:\n''40,50,60,80,100,125,150,180,200,240,320\n'))
-            except:
-                print('Please enter a whole number!')
+        # while True:
+        #     try:
+        #         if self.diameter in dia_list:
+        #             break
+        #         else:
+        #             self.diameter = int(input(self.name + ' has a bad diameter value\nPlease choose a new diameter from the list:\n''40,50,60,80,100,125,150,180,200,240,320\n'))
+        #     except:
+        #         print('Please enter a whole number!')
         self.length = length
-        self.twidth = widths[self.diameter]
+        self.twidth = widths[int(self.diameter)]
         self.depth = None
 
     def __repr__(self):
@@ -50,42 +50,52 @@ def show_only_max_cover(df,row):
     max_cover = float(df.loc[row,"COVER"].split('max-')[1])
     return max_cover
 
-def replace_depth(df,row):
-    pass
-
-# def remove_cm(df):
-#     '''removes cm from data frame'''
-#     for row in range(len(df)):
-#         s = df.loc[row,'Diameter']
-#         s= s.replace('cm','')
-#         df.loc[row,'Diameter'] = df.loc[row,'Diameter']
-#     return(df)
-
-
+def ol2dl(lst, att):
+    a_set = set([getattr(obj, att) for obj in lst])
+    return dict((key, []) for key in a_set)
 
 
 filename = askopenfilename()
 df = pd.read_csv(filename)
 df = delete_level(df)
 df['Diameter'] = df['Diameter'].str.replace('cm','')
+df['Diameter'] = pd.to_numeric(df['Diameter'])
+df['Length'] = pd.to_numeric(df['Length'])
+df_ex = df[['Pipe Name', 'Diameter' , 'Length']]
+# df_ex['Depth'] = 0
 pipelst = []
+
 for row in range(len(df)):
     df.loc[row,'COVER'] = show_only_max_cover(df, row)
-    name = df.loc[row,'COVER']
-    dia = df.loc[row,'COVER']
-    length = df.loc[row,'COVER']
+    name = df.loc[row,'Pipe Name']
+    dia = df.loc[row,'Diameter']
+    length = df.loc[row,'Length']
     pipelst.append(Pipe(name,dia,length))
-    pipelst[row].depth = df.loc[row,'COVER'] + pipelst[row].diameter + pipelst[row].twidth
+    pipelst[row].depth = float(df.loc[row,'COVER']) + ((float(pipelst[row].diameter))/100) + (float(pipelst[row].twidth)/100)
+
+qp = ol2dl(pipelst, 'diameter')
+
+for dia in qp:
+    for d in range(2,8):
+        total = 0
+        for pipe in pipelst:
+            if d == 2:
+                if pipe.depth <= 2 and pipe.diameter == dia:
+                    total = total + pipe.length
+            else:
+                if (pipe.depth > d and pipe.depth <= d+1) and (pipe.diameter == dia):
+                    total = total + pipe.length
+       
+        qp[dia].append(total)
+print(qp)
+ 
 
 
-print(df)
-print(pipelst)
 
-# pipelst = []
-# for row in range(len(df)):
-#     n,d,l,de = convert_to_object_list(df, row)
-#     pipelst.append(Pipe(n,d,l,de))
 
-# for pipe in pipelst:
-#     print(pipe.name,pipe.diameter,pipe.twidth())
+
+# print(df)
+# print(pipelst, len(pipelst))
+
+
 
