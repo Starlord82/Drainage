@@ -9,27 +9,29 @@ import pandas as pd
 from tkinter.filedialog import askopenfilename
 
 #Pipes
+dia_list = [40,50,60,80,100,125,150,180,200,240,320]
+widths = {40:7.5,50:8.5,60:10,80:12.4,100:14.8,125:17.5,150:18,180:20,200:20,24:240,320:30}
 class Pipe():
     """docstring for ClassName"""
-    dia_list = [40,50,60,80,100,125,150,180,200,240,320]
-    def __init__(self, name, diameter, length, maxdepth):
+    
+    def __init__(self, name, diameter, length):
         self.name = name
         self.diameter = diameter
         while True:
             try:
-                if self.diameter in [40,50,60,80,100,125,150,180,200,240,320]:
+                if self.diameter in dia_list:
                     break
                 else:
                     self.diameter = int(input(self.name + ' has a bad diameter value\nPlease choose a new diameter from the list:\n''40,50,60,80,100,125,150,180,200,240,320\n'))
             except:
                 print('Please enter a whole number!')
         self.length = length
-        self.maxdepth = maxdepth
+        self.twidth = widths[self.diameter]
+        self.depth = None
 
-    def twidth(self):
-        '''returns flange width by diameter'''
-        widths = {40:7.5,50:8.5,60:10,80:12.4,100:14.8,125:17.5,150:18,180:20,200:20,24:240,320:30}
-        return widths[self.diameter]
+    def __repr__(self):
+        return self.name
+        
 
 def convert_to_object_list(df,row):
     '''returns tuples of values from dataframe'''
@@ -43,20 +45,21 @@ def delete_level(df_input):
     df_input = df_input.reset_index(drop = True)
     return df_input
 
-def find_depth(df,row):
+def show_only_max_cover(df,row):
     '''returns depth based on max cover'''
     max_cover = float(df.loc[row,"COVER"].split('max-')[1])
-    depth = max_cover 
-    return depth
+    return max_cover
 
 def replace_depth(df,row):
     pass
 
-def remove_cm(df):
-    '''removes cm from data frame'''
-    for row in range(len(df)):
-        df.loc[row,'Diameter'].replace('cm','')
-    return(df)
+# def remove_cm(df):
+#     '''removes cm from data frame'''
+#     for row in range(len(df)):
+#         s = df.loc[row,'Diameter']
+#         s= s.replace('cm','')
+#         df.loc[row,'Diameter'] = df.loc[row,'Diameter']
+#     return(df)
 
 
 
@@ -64,10 +67,19 @@ def remove_cm(df):
 filename = askopenfilename()
 df = pd.read_csv(filename)
 df = delete_level(df)
-print(find_depth(df,0))
-df = remove_cm(df)
+df['Diameter'] = df['Diameter'].str.replace('cm','')
+pipelst = []
+for row in range(len(df)):
+    df.loc[row,'COVER'] = show_only_max_cover(df, row)
+    name = df.loc[row,'COVER']
+    dia = df.loc[row,'COVER']
+    length = df.loc[row,'COVER']
+    pipelst.append(Pipe(name,dia,length))
+    pipelst[row].depth = df.loc[row,'COVER'] + pipelst[row].diameter + pipelst[row].twidth
+
 
 print(df)
+print(pipelst)
 
 # pipelst = []
 # for row in range(len(df)):
