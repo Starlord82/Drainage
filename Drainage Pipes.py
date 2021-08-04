@@ -76,18 +76,22 @@ for row in range(len(df)):
 qp = ol2dl(pipelst, 'diameter')
 
 for dia in qp:
+    print(dia)
     for d in range(2,8):
         total = 0
         for pipe in pipelst:
+            print(pipe.name)
             if d == 2:
-                if pipe.depth <= 2 and pipe.diameter == dia:
-                    total = total + pipe.length
+                if pipe.depth <= d and pipe.diameter == dia:
+                    total +=  pipe.length
             else:
                 if (pipe.depth > d and pipe.depth <= d+1) and (pipe.diameter == dia):
-                    total = total + pipe.length
+                    total += total + pipe.length
+            
        
         qp[dia].append(total)
 print(qp)
+# print(df_ex)
  
 
 
