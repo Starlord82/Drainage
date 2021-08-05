@@ -89,6 +89,7 @@ for dia in qp:
 
 row_index = ["0-2","2-3","3-4","4-5","5-6","6-7","7-8"]
 df_ex_sheet_2 = pd.DataFrame(data = qp, index = row_index)
+df_ex_sheet_2 = df_ex_sheet_2.reindex(sorted(df_ex_sheet_2.columns), axis = 1)
 with pd.ExcelWriter(filename.split('.csv')[0] + '-output.xlsx') as writer:
         df_ex.to_excel(writer, sheet_name="מקור")
         df_ex_sheet_2.to_excel(writer, sheet_name="כמויות")
