@@ -57,7 +57,7 @@ if __name__ == "__main__":
     from tkinter import filedialog
     import numpy as np
 
-    filename = askopenfilename()
+    filename = askopenfilename(title = "Select File", filetypes = (('CSV files', '*.csv'),))
 
     df = pd.read_csv(filename)
     df_mh = df
