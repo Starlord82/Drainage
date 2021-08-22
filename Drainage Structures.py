@@ -15,16 +15,18 @@ class Structure:
 
 def dimenstion(df,row):
     #Cleans size text
-    dim = df.loc[row, "SIZE"]        
-    if "???X???" in dim:
-       return df.loc[row, "SIZE"].split('D-')[1] #Returns the diameter from list of splited string
+    dim = df.loc[row, "SIZE"]  
+    match = re.search(r'\d+X\d+|(?<=D- )\d+',dim)    #(?<=x) means find what x proceeds
+    if match != None:
+        return match.group()
     else:
-       return re.split("-| or", df.loc[row, "SIZE"])[1] #Returns rectangular dimensions list of splited string
+        return "מוצא ניקוז" 
 
 def transpose_size(df,row):
     # prevents sizes of 120X140 and 140X120 to count as 2 diffrent sizes 
     size = df.loc[row,"SIZE"]
-    if 'X' in size and size != '???X???':
+    match = re.search(r'\d+X\d+', size)
+    if match!= None:
         sp = size.split('X')
         return str(min(sp)) + 'X' + str(max(sp))
     else:
@@ -68,6 +70,9 @@ if __name__ == "__main__":
 
 
     for row in range(1,len(df_mh)+1):
+        check_numeric = re.search(r'\d', df_mh.loc[row,"SIZE"])
+        if check_numeric == None:
+            df_mh.loc[row,"SIZE"] = "0"
         df_mh.loc[row, "SIZE"] = dimenstion(df_mh,row)
         df_mh.loc[row, "SIZE"] = transpose_size(df_mh,row)
 
