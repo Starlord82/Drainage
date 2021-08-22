@@ -48,7 +48,7 @@ def ol2dl(lst, att):
     return dict((key, []) for key in a_set)
 
 
-filename = askopenfilename(title = "Select File",filetypes = (('CSV Files', '*.csv'),))
+filename = askopenfilename(title = "Select PIPE file",filetypes = (('CSV Files', '*.csv'),))
 df = pd.read_csv(filename)
 df = delete_level(df)
 df['Diameter'] = df['Diameter'].str.replace('cm','')
