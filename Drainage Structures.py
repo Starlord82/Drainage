@@ -97,14 +97,15 @@ if __name__ == "__main__":
     # etc.
 
     for key in qs:
-        # First we check in range of 0-2
+        # First we check in range of 0-2 or 0-1.5 
         counter = 0
         for obj in s_list:
-                if (obj.size == key) and (obj.depth > 0 and obj.depth <= 1.25):
+                if (obj.size == key) and (obj.depth > 0 and obj.depth <= 1.5):
                     counter += 1
         qs[key].append(counter)
         # Then we check in range of 2-8 with increment of 0.5.
-        for d in np.arange(1.25,7.75,0.5):
+        # for d in np.arange(1.25,7.75,0.5):
+        for d in np.arange(1.5,8,0.5):
             counter = 0
             for obj in s_list:
                 if (obj.size == key) and (obj.depth > d and obj.depth <= d+0.5):
@@ -112,9 +113,12 @@ if __name__ == "__main__":
             qs[key].append(counter)
 
 
-    rowindex = ['0-1.25','1.25-1.75','1.75-2.25','2.25-2.75','2.75-3.25',
-                '3.25-3.75','3.75-4.25','4.25-4.75','4.75-5.25','5.25-5.75',
-                '5.75-6.25','6.25-6.75','6.75-7.25','7.25-7.75']
+    # rowindex = ['0-1.25','1.25-1.75','1.75-2.25','2.25-2.75','2.75-3.25',
+    #             '3.25-3.75','3.75-4.25','4.25-4.75','4.75-5.25','5.25-5.75',
+    #             '5.75-6.25','6.25-6.75','6.75-7.25','7.25-7.75']
+    rowindex = ['0-1.5','1.5-2','2-2.5','2.5-3','3-3.5',
+                '3.5-4','4-4.5','4.5-5','5-5.5','5.5-6',
+                '6-6.5','6.5-7','7-7.5','7.5-8']
 
     df_new = pd.DataFrame(data=qs,
                             index=rowindex)
