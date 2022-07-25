@@ -61,7 +61,7 @@ if __name__ == "__main__":
 
     filename = askopenfilename(title = "Select STRUCTURE file", filetypes = (('CSV files', '*.csv'),))
 
-    df = pd.read_csv(filename)
+    df = pd.read_csv(filename,)
     df_mh = df
     df_mh.columns = df_mh.iloc[0]           ##Makes the second row the header
     df_mh = df_mh.drop(0)
